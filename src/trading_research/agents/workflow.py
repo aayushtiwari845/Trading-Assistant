@@ -205,7 +205,12 @@ def sentiment_analysis_agent(state: ResearchGraphState) -> ResearchGraphState:
 
 def risk_assessment_agent(state: ResearchGraphState) -> ResearchGraphState:
     price_frame = price_history_frame(state["data_collection"]["payload"]["price_history"])
-    benchmark_bundle = fetch_market_data(settings.market_benchmark)
+    benchmark_bundle = fetch_market_data(
+        settings.market_benchmark,
+        include_info=False,
+        include_financials=False,
+        include_analyst_ratings=False,
+    )
     benchmark_frame = price_history_frame(benchmark_bundle.price_history)
     risk_metrics = calculate_risk_metrics(price_frame, benchmark_frame)
     ledger = CostLedger()

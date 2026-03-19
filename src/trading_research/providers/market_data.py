@@ -43,7 +43,13 @@ def _fallback_history(days: int = 365) -> list[dict[str, Any]]:
     return rows
 
 
-def fetch_market_data(ticker: str, period: str = "1y") -> MarketDataBundle:
+def fetch_market_data(
+    ticker: str,
+    period: str = "1y",
+    include_info: bool = True,
+    include_financials: bool = True,
+    include_analyst_ratings: bool = True,
+) -> MarketDataBundle:
     if not yf:
         LOGGER.warning("yfinance unavailable, using fallback market data for %s", ticker)
         return MarketDataBundle(
@@ -62,25 +68,32 @@ def fetch_market_data(ticker: str, period: str = "1y") -> MarketDataBundle:
             hist["Date"] = hist["Date"].astype(str)
             history_rows = hist.to_dict(orient="records")
 
-        financials = {
-            "income_statement": getattr(stock, "financials", pd.DataFrame()).fillna(0).to_dict(),
-            "balance_sheet": getattr(stock, "balance_sheet", pd.DataFrame()).fillna(0).to_dict(),
-            "cash_flow": getattr(stock, "cashflow", pd.DataFrame()).fillna(0).to_dict(),
-            "quarterly_financials": getattr(stock, "quarterly_financials", pd.DataFrame()).fillna(0).to_dict(),
-        }
+        financials = {}
+        if include_financials:
+            financials = {
+                "income_statement": getattr(stock, "financials", pd.DataFrame()).fillna(0).to_dict(),
+                "balance_sheet": getattr(stock, "balance_sheet", pd.DataFrame()).fillna(0).to_dict(),
+                "cash_flow": getattr(stock, "cashflow", pd.DataFrame()).fillna(0).to_dict(),
+                "quarterly_financials": getattr(stock, "quarterly_financials", pd.DataFrame()).fillna(0).to_dict(),
+            }
 
-        recommendations = getattr(stock, "recommendations", None)
         recent_ratings = []
         consensus = "N/A"
-        if recommendations is not None and not recommendations.empty:
-            tail = recommendations.tail(10).reset_index().astype(str)
-            recent_ratings = tail.to_dict(orient="records")
-            if "To Grade" in recommendations.columns:
-                consensus = recommendations["To Grade"].mode().iloc[0]
+        if include_analyst_ratings:
+            recommendations = getattr(stock, "recommendations", None)
+            if recommendations is not None and not recommendations.empty:
+                tail = recommendations.tail(10).reset_index().astype(str)
+                recent_ratings = tail.to_dict(orient="records")
+                if "To Grade" in recommendations.columns:
+                    consensus = recommendations["To Grade"].mode().iloc[0]
+
+        company_info = {"symbol": ticker}
+        if include_info:
+            company_info = getattr(stock, "info", {}) or {"symbol": ticker}
 
         return MarketDataBundle(
             price_history=history_rows,
-            company_info=getattr(stock, "info", {}) or {"symbol": ticker},
+            company_info=company_info,
             financials=financials,
             analyst_ratings={
                 "consensus": consensus,
