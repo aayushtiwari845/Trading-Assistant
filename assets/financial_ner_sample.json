@@ -1,0 +1,21 @@
+[
+  {
+    "text": "Apple Inc. reported revenue of $383.3 billion for fiscal year 2023, up 8% year over year.",
+    "entities": [
+      {"start": 0, "end": 10, "label": "COMPANY"},
+      {"start": 20, "end": 27, "label": "METRIC"},
+      {"start": 31, "end": 45, "label": "VALUE"},
+      {"start": 50, "end": 66, "label": "TIME"},
+      {"start": 71, "end": 73, "label": "PERCENTAGE"}
+    ]
+  },
+  {
+    "text": "Microsoft guided Azure growth to 31% and raised its capital expenditure outlook for FY2026.",
+    "entities": [
+      {"start": 0, "end": 9, "label": "COMPANY"},
+      {"start": 17, "end": 29, "label": "METRIC"},
+      {"start": 33, "end": 36, "label": "PERCENTAGE"},
+      {"start": 77, "end": 83, "label": "TIME"}
+    ]
+  }
+]

@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "intelligent-trading-research-platform"
+version = "0.1.0"
+description = "Multi-agent AI platform for institutional-style stock research."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+  { name = "Aayus" }
+]
+dependencies = [
+  "beautifulsoup4>=4.12.3",
+  "chromadb>=0.5.23",
+  "fastapi>=0.115.0",
+  "httpx>=0.28.1",
+  "jinja2>=3.1.6",
+  "langchain>=0.3.19",
+  "langchain-chroma>=0.2.2",
+  "langchain-community>=0.3.18",
+  "langchain-openai>=0.3.7",
+  "langgraph>=0.2.74",
+  "markdown>=3.7",
+  "numpy>=2.2.3",
+  "orjson>=3.10.15",
+  "pandas>=2.2.3",
+  "pandas-ta>=0.3.14b0",
+  "pydantic>=2.10.6",
+  "pydantic-settings>=2.7.1",
+  "python-dotenv>=1.0.1",
+  "python-multipart>=0.0.20",
+  "redis>=5.2.1",
+  "reportlab>=4.3.1",
+  "requests>=2.32.3",
+  "sec-edgar-downloader>=5.0.3",
+  "sentence-transformers>=3.4.1",
+  "streamlit>=1.42.2",
+  "tenacity>=9.0.0",
+  "transformers>=4.49.0",
+  "torch>=2.6.0",
+  "uvicorn[standard]>=0.34.0",
+  "yfinance>=0.2.54"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3.5",
+  "pytest-asyncio>=0.25.3",
+  "ruff>=0.9.7"
+]
+eval = [
+  "datasets>=3.3.2",
+  "ragas>=0.2.14",
+  "wandb>=0.19.8"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
