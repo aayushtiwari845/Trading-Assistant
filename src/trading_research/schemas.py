@@ -69,6 +69,22 @@ class ResearchResult(BaseModel):
     cost_estimate_usd: float = 0.0
 
 
+class ReportArtifacts(BaseModel):
+    markdown_path: str | None = None
+    pdf_path: str | None = None
+
+
+class ResearchResultSummary(BaseModel):
+    request_id: str
+    ticker: str
+    status: AnalysisStatus
+    current_agent: str
+    completed_agents: list[str] = Field(default_factory=list)
+    execution_time_seconds: float = 0.0
+    cost_estimate_usd: float = 0.0
+    report_artifacts: ReportArtifacts = Field(default_factory=ReportArtifacts)
+
+
 @dataclass
 class CostLedger:
     total_tokens: int = 0
@@ -79,4 +95,3 @@ class CostLedger:
         self.total_tokens += tokens
         self.total_cost_usd += cost_usd
         self.by_component[component] = self.by_component.get(component, 0.0) + cost_usd
-

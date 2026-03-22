@@ -41,7 +41,7 @@ if start:
             request_id = create_response.json()["request_id"]
             result = {}
             for _ in range(60):
-                poll = requests.get(f"{api_base_url}/api/research/{request_id}", timeout=30)
+                poll = requests.get(f"{api_base_url}/api/research/{request_id}/full", timeout=30)
                 poll.raise_for_status()
                 result = poll.json()
                 if result.get("status") in {"completed", "failed"}:
@@ -74,4 +74,3 @@ if start:
 
         with tab5:
             st.json(payload.get("risk_assessment", {}).get("payload", {}))
-

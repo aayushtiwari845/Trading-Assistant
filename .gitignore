@@ -15,4 +15,5 @@ chroma/
 wandb/
 streamlit/.streamlit/secrets.toml
 reports/
-
+*.out.log
+*.err.log
